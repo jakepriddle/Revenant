@@ -37,7 +37,7 @@ public class RevenantHoleESP extends RevenantModule {
     private RevenantSetting bedrockRed = newSetting(new String[] {"Bedrock Red", "Bedrock Red", "Color red."}, 255, 0, 255);
     private RevenantSetting bedrockGreen = newSetting(new String[] {"Bedrock Green", "Bedrock Green", "Color green."}, 0, 0, 255);
     private RevenantSetting bedrockBlue = newSetting(new String[] {"Bedrock Blue", "Bedrock Blue", "Color blue."}, 255, 0, 255);
-    private RevenantSetting mode   = newSetting(new String[] {"Mode", "ModuleMode", "Mode"}, Mode.FlatWireFrame);
+    private RevenantSetting mode = newSetting(new String[] {"Mode", "ModuleMode", "Mode"}, Mode.FlatWireFrame);
 
     private BlockPos render;
     private static boolean isSpoofingAngles;

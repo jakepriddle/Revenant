@@ -2,6 +2,7 @@ package me.rina.racc.manager;
 
 // Minecraft.
 import me.rina.racc.client.modules.combat.RevenantAutoCrystal;
+import me.rina.racc.client.modules.combat.RevenantAutoTotem;
 import me.rina.racc.client.modules.combat.RevenantCombatInfo;
 import me.rina.racc.client.modules.movement.RevenantSprint;
 import me.rina.racc.client.modules.movement.RevenantVelocity;
@@ -62,6 +63,7 @@ public class RevenantModuleManager {
         // Combat category modules.
         addModuleInList(new RevenantAutoCrystal());
         addModuleInList(new RevenantCombatInfo());
+        addModuleInList(new RevenantAutoTotem());
 
         // Exploit category modules.
         addModuleInList(new RevenantTimer());

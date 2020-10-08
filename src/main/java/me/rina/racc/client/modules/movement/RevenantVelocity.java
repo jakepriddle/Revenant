@@ -22,5 +22,10 @@ public class RevenantVelocity extends RevenantModule {
             event.cancel();
         }
     }
+
+    @Override
+    public String getHUDInfo(){
+        return "H:0% V:0%";
+    }
 }
 
