@@ -292,7 +292,7 @@ public class RevenantModule {
         MISC("Misc", "Misc", "Specified modules to use."),
         MOVEMENT("Movement", "Movement", "Modules for movementation."),
         EXPLOIT("Exploit", "Exploit", "Exploit, crash..."),
-        OTHER("Other", "Other", "Unknow category for modules."),
+        RENDER("Render", "Render", "Render modules."),
         OVERLAY("Overlay", "Overlay", "Category for components HUD."),
         CLIENT("Client", "Client", "Client basic modules.");
 
