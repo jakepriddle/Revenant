@@ -8,7 +8,8 @@ public class RevenantTimer extends RevenantModule {
         super("Timer", "timer", "modifies client side ticks", Category.PLAYER);
     }
 
-    private RevenantSetting ticks = newSetting(new String[] {"Ticks"}, 4, 0, 20);
+    //private RevenantSetting ticks = newSetting(new String[] {"Ticks"}, 4, 0, 20);
+    private RevenantSetting ticks = newSetting(new String[] {"Ticks", "TimerTicks", "Ticks"}, 2, 0, 10);
 
     @Override
     public void onDisable() {
