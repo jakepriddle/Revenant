@@ -3,6 +3,7 @@ package me.rina.racc.client.modules.combat;
 import me.rina.racc.Revenant;
 import me.rina.racc.client.RevenantModule;
 import me.rina.racc.client.RevenantSetting;
+import me.rina.racc.util.misc.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -215,6 +216,10 @@ public class RevenantAutoCrystal extends RevenantModule {
                             placeDelayInt = 0;
                             isPlacing = true;
 
+                            if (rotate.getBoolean()){
+                                //todo: rotate
+                            }
+
                             if (raytrace.getBoolean()){
                                 mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(targetBlock, enumFacing, offhandCheck ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
                             }
@@ -268,15 +273,14 @@ public class RevenantAutoCrystal extends RevenantModule {
         BlockPos targetBlockPos = new BlockPos(target.posX, target.posY, target.posZ);
 
         List<BlockPos> possibleBlocks = getPossibleBlocks(targetBlockPos);
+        List<Pair<Double, BlockPos>> calculatedBlocks = new ArrayList<>();
 
         for (BlockPos blockPos : possibleBlocks){
-            //calculate damage for each
-            //total list
-            //sort to highest
-            //set highest to bestBlockPos
+            int damageDealt = calculateDamage(blockPos, target);
+            calculatedBlocks.add(new Pair(damageDealt, blockPos)); //this should work
         }
 
-        //todo
+        //come up with a method to find the highest damage pairing
 
         return bestBlockPos;
     }
@@ -290,9 +294,25 @@ public class RevenantAutoCrystal extends RevenantModule {
         return allPos;
     }
 
+    //modified the old GameSense sphere calculation, not really any better ways to do this
     private List<BlockPos> getSphere(BlockPos inputPos, double radius, double height, boolean hollow, boolean sphere, int yPlus) {
         List<BlockPos> spherePos = new ArrayList<>();
-        //todo
+        int posX = inputPos.x;
+        int posY = inputPos.y;
+        int posZ = inputPos.z;
+
+        for (int i = posX - (int) radius; i <= posX + radius; i++){
+            for (int i2 = posZ - (int) radius; i2 <= posZ + radius; i++){
+                for (int i3 = (sphere ? posY - (int) radius : posY); i3 < (sphere ? posY + radius : posY + height); i3++){
+                    double distance = (posX - i) * (posX - i) + (posZ - i2) * (posZ - i2) + (sphere ? (posY - i3) * (posY - i3) : 0);
+
+                    if (distance < radius * radius && !(hollow && distance < (radius - 1) * (radius - 1))) {
+                        BlockPos foundBlock = new BlockPos(i, i3 + yPlus, i2);
+                        spherePos.add(foundBlock);
+                    }
+                }
+            }
+        }
         return spherePos;
     }
 
@@ -318,5 +338,11 @@ public class RevenantAutoCrystal extends RevenantModule {
             }
         }
         return false;
+    }
+
+    private int calculateDamage(BlockPos blockPos, EntityPlayer target){
+        int damage = 0;
+
+        return damage;
     }
 }
