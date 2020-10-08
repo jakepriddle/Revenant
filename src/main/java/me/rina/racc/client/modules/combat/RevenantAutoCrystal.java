@@ -6,6 +6,7 @@ import me.rina.racc.client.RevenantSetting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -15,9 +16,13 @@ import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author Hoosiers on 10/07/2020
@@ -35,7 +40,9 @@ public class RevenantAutoCrystal extends RevenantModule {
     private RevenantSetting breakRange = newSetting(new String[]{"BreakRange", "ACBreakRange", "BreakRange"}, 4.4, 0.0, 10.0);
     private RevenantSetting wallsRange = newSetting(new String[]{"WallsRange", "ACWallsRange", "WallsRange"}, 3.5, 0.0, 5.0);
     private RevenantSetting antiWeakness = newSetting(new String[]{"AntiWeakness", "ACAntiWeakness", "AntiWeakness"}, true);
+    private RevenantSetting placeLogic = newSetting(new String[]{"PlaceLogic", "ACPlaceLogic", "PlaceLogic"}, PlaceLogic.DEFAULT);
     private RevenantSetting placeCrystal = newSetting(new String[]{"Place", "ACPlace", "Place"}, true);
+    private RevenantSetting placeRange = newSetting(new String[]{"PlaceRange", "ACPlaceRange", "PlaceRange"}, 4.4, 0.0, 10.0);
     private RevenantSetting placeDelay = newSetting(new String[]{"PlaceDelay", "ACPlaceDelay", "PlaceDelay"}, 1, 0, 10);
     private RevenantSetting enemyRange = newSetting(new String[]{"EnemyRange", "ACEnemyRange", "EnemyRange"}, 6.0, 0.0, 20.0);
     private RevenantSetting antiSuicide = newSetting(new String[]{"AntiSuicide", "ACAntiSuicide", "AntiSuicide"}, true);
@@ -51,6 +58,11 @@ public class RevenantAutoCrystal extends RevenantModule {
     public enum HandLogic{
         MAINHAND,
         OFFHAND
+    }
+
+    public enum PlaceLogic{
+        DEFAULT,
+        THIRTEEN
     }
 
     public RevenantAutoCrystal(){
@@ -201,6 +213,7 @@ public class RevenantAutoCrystal extends RevenantModule {
 
                         if (placeDelayInt <= placeDelay.getInteger()){
                             placeDelayInt = 0;
+                            isPlacing = true;
 
                             if (raytrace.getBoolean()){
                                 mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(targetBlock, enumFacing, offhandCheck ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
@@ -215,6 +228,7 @@ public class RevenantAutoCrystal extends RevenantModule {
                             mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
                         }
                         placeDelayInt++;
+                        isPlacing = false;
             });
         }
     }
@@ -253,7 +267,7 @@ public class RevenantAutoCrystal extends RevenantModule {
 
         BlockPos targetBlockPos = new BlockPos(target.posX, target.posY, target.posZ);
 
-        BlockPos[] possibleBlocks = getPossibleBlocks(targetBlockPos);
+        List<BlockPos> possibleBlocks = getPossibleBlocks(targetBlockPos);
 
         for (BlockPos blockPos : possibleBlocks){
             //calculate damage for each
@@ -267,11 +281,42 @@ public class RevenantAutoCrystal extends RevenantModule {
         return bestBlockPos;
     }
 
-    private BlockPos[] getPossibleBlocks(BlockPos targetBlockPos) {
-        BlockPos[] allPos = null;
+    private List<BlockPos> getPossibleBlocks(BlockPos targetBlockPos) {
+        List<BlockPos> allPos = new ArrayList<>();
 
-        //todo, probably gonna be a sphere
+        allPos.addAll(getSphere(targetBlockPos, placeRange.getDouble(), placeRange.getDouble(), false, true,0).stream()
+                .filter(blockPos -> validPlacement(blockPos)).collect(Collectors.toList()));
 
         return allPos;
+    }
+
+    private List<BlockPos> getSphere(BlockPos inputPos, double radius, double height, boolean hollow, boolean sphere, int yPlus) {
+        List<BlockPos> spherePos = new ArrayList<>();
+        //todo
+        return spherePos;
+    }
+
+    private boolean validPlacement(BlockPos blockPos){
+        BlockPos upOne = new BlockPos(blockPos.x, blockPos.y + 1, blockPos.z);
+        BlockPos upTwo = new BlockPos(blockPos.x, blockPos.y + 2, blockPos.z);
+        if (mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK){
+            if (mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(upOne)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(upTwo)).isEmpty()) {
+                switch ((PlaceLogic) placeLogic.getEnum()) {
+                    case DEFAULT: {
+                        if (mc.world.getBlockState(upOne).getBlock() == Blocks.AIR || mc.world.getBlockState(upOne).getBlock() == Blocks.WEB){
+                            if (mc.world.getBlockState(upTwo).getBlock() == Blocks.AIR || mc.world.getBlockState(upTwo).getBlock() == Blocks.WEB){
+                                return true;
+                            }
+                        }
+                    }
+                    case THIRTEEN: {
+                        if (mc.world.getBlockState(upOne).getBlock() == Blocks.AIR || mc.world.getBlockState(upOne).getBlock() == Blocks.WEB){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
