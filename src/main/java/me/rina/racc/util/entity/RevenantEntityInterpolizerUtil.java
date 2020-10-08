@@ -1,6 +1,7 @@
 package me.rina.racc.util.entity;
 
 // Minecraft.
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -63,5 +64,27 @@ public class RevenantEntityInterpolizerUtil {
         return new double[] {
                 x, y, z
         };
+    }
+
+    public static double[] calculateLookAt(double px, double py, double pz, EntityPlayer me) {
+        double dirx = me.posX - px;
+        double diry = me.posY - py;
+        double dirz = me.posZ - pz;
+
+        double len = Math.sqrt(dirx * dirx + diry * diry + dirz * dirz);
+
+        dirx /= len;
+        diry /= len;
+        dirz /= len;
+
+        double pitch = Math.asin(diry);
+        double yaw = Math.atan2(dirz, dirx);
+
+        pitch = pitch * 180.0d / Math.PI;
+        yaw = yaw * 180.0d / Math.PI;
+
+        yaw += 90f;
+
+        return new double[]{yaw, pitch};
     }
 }

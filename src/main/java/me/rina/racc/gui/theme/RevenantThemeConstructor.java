@@ -46,8 +46,8 @@ public class RevenantThemeConstructor {
     public void refreshTheme() {
         this.frameName = new int[] {
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorRed").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorGreen").getInteger()
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorGreen").getInteger(),
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger()
         };
 
         this.frameNameBackground = new int[] {
@@ -66,8 +66,8 @@ public class RevenantThemeConstructor {
 
         this.moduleName = new int[] {
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorRed").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorGreen").getInteger()
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorGreen").getInteger(),
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger()
         };
 
         this.moduleNameBackground = new int[] {
@@ -86,8 +86,8 @@ public class RevenantThemeConstructor {
 
         this.settingName = new int[] {
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorRed").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorGreen").getInteger()
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorGreen").getInteger(),
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger()
         };
 
         this.settingNameBackground = new int[] {

@@ -38,7 +38,7 @@ import me.rina.racc.Revenant;
  *
  **/
 public class RevenantModule {
-    public final Minecraft mc = Minecraft.getMinecraft();
+    protected static Minecraft mc = Minecraft.getMinecraft();
 
     /**
      * Details:

@@ -1,0 +1,26 @@
+package me.rina.racc.client.modules.movement;
+
+import me.rina.racc.client.RevenantModule;
+import me.rina.racc.event.network.RevenantEventPacket;
+import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.SPacketExplosion;
+import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
+public class RevenantVelocity extends RevenantModule {
+    public RevenantVelocity() {
+        super("Velocity", "Velocity", "Modifies player velocity", Category.MOVEMENT);
+    }
+
+    @Listener
+    public void listener(RevenantEventPacket.Receive event) {
+        if (event.getPacket() instanceof SPacketEntityVelocity) {
+            if (((SPacketEntityVelocity) event.getPacket()).getEntityID() == mc.player.getEntityId())
+                event.cancel();
+        }
+
+        if (event.getPacket() instanceof SPacketExplosion) {
+            event.cancel();
+        }
+    }
+}
+

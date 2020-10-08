@@ -19,6 +19,8 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
 // Static.
+import java.awt.*;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class RevenantTessellator extends Tessellator
@@ -90,6 +92,38 @@ public class RevenantTessellator extends Tessellator
 
     public static void drawDownBox (BufferBuilder buffer, float x, float y, float z, float w, float h, float d, RVColor color, int sides) {
         drawBox(buffer,x,y,z,w,-h,d,color,sides);
+    }
+
+    public static void drawBoundingBoxBottomBlockPos(BlockPos bp, float width, int r, int g, int b, int alpha) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.disableDepth();
+        GlStateManager.tryBlendFuncSeparate((int) 770, (int) 771, (int) 0, (int) 1);
+        GlStateManager.disableTexture2D();
+        GlStateManager.depthMask((boolean) false);
+        GL11.glEnable((int) 2848);
+        GL11.glHint((int) 3154, (int) 4354);
+        GL11.glLineWidth((float) width);
+        Minecraft mc = Minecraft.getMinecraft();
+        double x = (double) bp.getX() - mc.getRenderManager().viewerPosX;
+        double y = (double) bp.getY() - mc.getRenderManager().viewerPosY;
+        double z = (double) bp.getZ() - mc.getRenderManager().viewerPosZ;
+        AxisAlignedBB bb = new AxisAlignedBB(x, y, z, x + 1.0, y + 1.0, z + 1.0);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, alpha).endVertex();
+        bufferbuilder.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, alpha).endVertex();
+        bufferbuilder.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, alpha).endVertex();
+        bufferbuilder.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, alpha).endVertex();
+        bufferbuilder.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, alpha).endVertex();
+        tessellator.draw();
+        GL11.glDisable((int) 2848);
+        GlStateManager.depthMask((boolean) true);
+        GlStateManager.enableDepth();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     public static void drawBox(BufferBuilder buffer, float x, float y, float z, float w, float h, float d, RVColor color, int sides) {
@@ -187,7 +221,7 @@ public class RevenantTessellator extends Tessellator
         GlStateManager.popMatrix();
     }
 
-    public static void drawBoundingBoxBlockPos(BlockPos bp, float width, RVColor color) {
+    public static void drawBoundingBoxBlockPos(BlockPos bp, float width, Color color) {
         int r=color.getRed(), g=color.getGreen(), b=color.getBlue(), alpha=color.getAlpha();
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();

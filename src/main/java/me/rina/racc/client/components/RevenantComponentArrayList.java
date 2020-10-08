@@ -15,6 +15,8 @@ import me.rina.racc.util.client.RevenantChatUtil;
 
 // Revenant.
 import me.rina.racc.Revenant;
+import me.rina.turok.render.TurokRenderGL;
+import net.minecraft.client.gui.Gui;
 
 /**
  *
@@ -24,7 +26,8 @@ import me.rina.racc.Revenant;
  **/
 public class RevenantComponentArrayList extends RevenantComponent {
     private RevenantSetting rgb_effect = newSetting(new String[] {"RGB", "ComponentArrayListHUDRGB", "ArrayList utils."}, false);
-    private RevenantSetting hud_info_separator = newSetting(new String[] {"Module[HUDInfo]", "ArrayListHUDModuleHUDInfo", "ArrayList utils."}, false);
+    private RevenantSetting background = newSetting(new String[] {"Background", "ComponentArrayListHUDBackground", "ArrayList utils."}, false);
+    private RevenantSetting hud_info_separator = newSetting(new String[] {"HUD Info", "ArrayListHUDModuleHUDInfo", "ArrayList utils."}, false);
 
     List<RevenantModule> pretty_modules;
 
@@ -70,6 +73,7 @@ public class RevenantComponentArrayList extends RevenantComponent {
             } else {
                 renderString(module_name, 0, position_update_y, 255);
             };
+
 
             position_update_y += getStringHeight(module_name);
 

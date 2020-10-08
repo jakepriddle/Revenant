@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraft.client.Minecraft;
 
 // Pomelo event manager.
+import org.lwjgl.opengl.Display;
 import team.stiff.pomelo.impl.annotated.AnnotatedEventManager;
 import team.stiff.pomelo.EventManager;
 
@@ -83,6 +84,12 @@ public class Revenant {
      * - Make effective controller to all client.
      **/
     private RevenantSystem systemController;
+
+    @Mod.EventHandler
+    public void clientPreInitializer(FMLPreInitializationEvent event){
+        Display.setTitle(NAME + " Utility Mod " + VERSION);
+    }
+
 
     @Mod.EventHandler
     public void clientInitializer(FMLInitializationEvent event) {
