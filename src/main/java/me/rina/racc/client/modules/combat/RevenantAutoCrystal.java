@@ -3,7 +3,6 @@ package me.rina.racc.client.modules.combat;
 import me.rina.racc.Revenant;
 import me.rina.racc.client.RevenantModule;
 import me.rina.racc.client.RevenantSetting;
-import me.rina.racc.util.misc.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,10 +19,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.CombatRules;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -38,7 +34,7 @@ import java.util.stream.Collectors;
 /**
  * @Author Hoosiers on 10/07/2020
  *
- * @LastUpdate on 10/08/2020
+ * @LastUpdate on 10/09/2020
  */
 
 public class RevenantAutoCrystal extends RevenantModule {
@@ -221,7 +217,7 @@ public class RevenantAutoCrystal extends RevenantModule {
                         }
 
                         boolean offhandCheck = false;
-                        EnumFacing enumFacing = EnumFacing.NORTH; //todo, north is temp
+                        EnumFacing enumFacing = EnumFacing.NORTH; //todo raytracing calculation, north is temp
 
                         if (mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL){
                             offhandCheck = true;
@@ -295,36 +291,41 @@ public class RevenantAutoCrystal extends RevenantModule {
             bestBlockPos = null;
         }
 
-        BlockPos targetBlockPos = new BlockPos(target.posX, target.posY, target.posZ);
+        List<BlockPos> possibleBlocks = getPossibleBlocks();
 
-        List<BlockPos> possibleBlocks = getPossibleBlocks(targetBlockPos);
-        List<Pair<Float, BlockPos>> calculatedBlocks = new ArrayList<>();
+        float previousDamage = 0;
 
         for (BlockPos blockPos : possibleBlocks){
             float damageDealt = calculateDamage(blockPos, target);
             float selfDamageDealt = calculateDamage(blockPos, mc.player);
 
             if (damageDealt < minDamage.getDouble() && selfDamageDealt <= maxSelfDamage.getDouble()){
-                calculatedBlocks.add(new Pair(damageDealt, blockPos)); //this should work
+                if (damageDealt > previousDamage){
+                    previousDamage = damageDealt;
+                    bestBlockPos = blockPos;
+                }
+                else {
+                    bestBlockPos = blockPos;
+                }
             }
         }
 
-        //todo: come up with a method to find the highest damage pairing
-
+        possibleBlocks.clear();
         return bestBlockPos;
     }
 
-    private List<BlockPos> getPossibleBlocks(BlockPos targetBlockPos) {
-        List<BlockPos> allPos = new ArrayList<>();
+    private List<BlockPos> getPossibleBlocks() {
+        NonNullList<BlockPos> allPos = NonNullList.create();
+        BlockPos playerPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
 
-        allPos.addAll(getSphere(targetBlockPos, placeRange.getDouble(), placeRange.getDouble(), false, true,0).stream()
+        allPos.addAll(getSphere(playerPos, placeRange.getFloat(), placeRange.getFloat(), false, true,0).stream()
                 .filter(blockPos -> validPlacement(blockPos)).collect(Collectors.toList()));
 
         return allPos;
     }
 
     //modified the old GameSense sphere calculation, not really any better ways to do this
-    private List<BlockPos> getSphere(BlockPos inputPos, double radius, double height, boolean hollow, boolean sphere, int yPlus) {
+    private List<BlockPos> getSphere(BlockPos inputPos, float radius, float height, boolean hollow, boolean sphere, int yPlus) {
         List<BlockPos> spherePos = new ArrayList<>();
         int posX = inputPos.x;
         int posY = inputPos.y;
@@ -368,7 +369,7 @@ public class RevenantAutoCrystal extends RevenantModule {
     }
 
     private float calculateDamage(BlockPos blockPos, EntityPlayer target){
-        float damage = 1.0F;
+        float damage = 0.0F;
 
         float explosionDamage = 12.0F;
         double distanceFromExplosion = target.getDistance(blockPos.x, blockPos.y, blockPos.z) / (double) explosionDamage;
