@@ -53,7 +53,7 @@ public class RevenantThemeConstructor {
         this.frameNameBackground = new int[] {
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorRed").getInteger(),
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorGreen").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger(),
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorBlue").getInteger(),
                 255
         };
 
@@ -80,7 +80,7 @@ public class RevenantThemeConstructor {
         this.moduleNameHighlight = new int[] {
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorRed").getInteger(),
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorGreen").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger(),
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorBlue").getInteger(),
                 100
         };
 
@@ -100,7 +100,7 @@ public class RevenantThemeConstructor {
         this.settingNameHighlight = new int[] {
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorRed").getInteger(),
                 Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorGreen").getInteger(),
-                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUINameColorBlue").getInteger(),
+                Revenant.getModuleManager().getModuleByTag("GUI").getSettingByTag("GUIBaseColorBlue").getInteger(),
                 100
         };
 

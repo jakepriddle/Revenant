@@ -62,6 +62,7 @@ public class RevenantAutoCrystal extends RevenantModule {
     private RevenantSetting antiSuicideHealth = newSetting(new String[]{"SuicideHealth", "ACSuicideHealth", "SuicideHealth"}, 10, 0, 36);
     private RevenantSetting rotate = newSetting(new String[]{"Rotate", "ACRotate", "Rotate"}, true);
     private RevenantSetting raytrace = newSetting(new String[]{"Raytrace", "ACRaytrace", "Raytrace"}, false);
+    private RevenantSetting autoSwitch = newSetting(new String[]{"AutoSwitch", "ACAutoSwitch", "AutoSwitch"}, true);
 
     public enum CrystalLogic{
         BREAKPLACE,
@@ -227,7 +228,10 @@ public class RevenantAutoCrystal extends RevenantModule {
                         }
                         else {
                             offhandCheck = false;
-                            switchToCrystals();
+
+                            if (autoSwitch.getBoolean()) {
+                                switchToCrystals();
+                            }
                         }
 
                         if (placeDelayInt <= placeDelay.getInteger()){
@@ -410,6 +414,13 @@ public class RevenantAutoCrystal extends RevenantModule {
     }
 
     private void switchToCrystals(){
-
+        if (mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL){
+            for (int i = 0; i < 9; i++){
+                if (mc.player.inventory.getStackInSlot(i).getItem() == Items.END_CRYSTAL){
+                    mc.player.inventory.currentItem = i;
+                    break;
+                }
+            }
+        }
     }
 }
