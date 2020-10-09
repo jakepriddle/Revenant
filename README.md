@@ -7,26 +7,28 @@ Revenant is a utility mod for Minecraft anarchy servers. Most of the code is wri
 
 # Developers/Contributors:
 
-(https://github.com/i0x75) Racoon (owner)
+[Racoon (owner)](https://github.com/i0x75) 
 
-(https://github.com/SirRina) Sr. Rina
+[Sr. Rina](https://github.com/SirRina) 
 
-(https://github.com/olliem5) ollie
+[ollie](https://github.com/olliem5) 
 
-(https://github.com/GhostTypes) GhostTypes
+[GhostTypes](https://github.com/GhostTypes) 
 
-(https://github.com/linustouchtips) linustouchtips
+[linustouchtips](https://github.com/linustouchtips) 
 
-(https://github.com/LittleDraily) LittleDraily
+[LittleDraily](https://github.com/LittleDraily) 
 
-(https://github.com/IUDevman) Hoosiers
+[Hoosiers](https://github.com/IUDevman) 
 
-(https://github.com/Jrepxc) Jrexpc (Jake)
+[Jrexpc (Jake)](https://github.com/Jrepxc) 
 
 Mitch Fang
 
 # Credits
 
 *add the credits here*
+
+# Is Revenant based?
 
 Revenant is based asf.
