@@ -293,18 +293,15 @@ public class RevenantAutoCrystal extends RevenantModule {
 
         List<BlockPos> possibleBlocks = getPossibleBlocks();
 
-        float previousDamage = 0;
+        double previousDamage = 0;
 
         for (BlockPos blockPos : possibleBlocks){
-            float damageDealt = calculateDamage(blockPos, target);
-            float selfDamageDealt = calculateDamage(blockPos, mc.player);
+            double damageDealt = calculateDamage(blockPos, target);
+            double selfDamageDealt = calculateDamage(blockPos, mc.player);
 
             if (damageDealt < minDamage.getDouble() && selfDamageDealt <= maxSelfDamage.getDouble()){
                 if (damageDealt > previousDamage){
                     previousDamage = damageDealt;
-                    bestBlockPos = blockPos;
-                }
-                else {
                     bestBlockPos = blockPos;
                 }
             }
@@ -318,32 +315,30 @@ public class RevenantAutoCrystal extends RevenantModule {
         NonNullList<BlockPos> allPos = NonNullList.create();
         BlockPos playerPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
 
-        allPos.addAll(getSphere(playerPos, placeRange.getFloat(), placeRange.getFloat(), false, true,0).stream()
+        allPos.addAll(getSphere(playerPos, placeRange.getFloat(), placeRange.getInteger(), false, true,0).stream()
                 .filter(blockPos -> validPlacement(blockPos)).collect(Collectors.toList()));
 
         return allPos;
     }
 
     //modified the old GameSense sphere calculation, not really any better ways to do this
-    private List<BlockPos> getSphere(BlockPos inputPos, float radius, float height, boolean hollow, boolean sphere, int yPlus) {
-        List<BlockPos> spherePos = new ArrayList<>();
-        int posX = inputPos.x;
-        int posY = inputPos.y;
-        int posZ = inputPos.z;
-
-        for (int i = posX - (int) radius; i <= posX + radius; i++){
-            for (int i2 = posZ - (int) radius; i2 <= posZ + radius; i++){
-                for (int i3 = (sphere ? posY - (int) radius : posY); i3 < (sphere ? posY + radius : posY + height); i3++){
-                    double distance = (posX - i) * (posX - i) + (posZ - i2) * (posZ - i2) + (sphere ? (posY - i3) * (posY - i3) : 0);
-
-                    if (distance < radius * radius && !(hollow && distance < (radius - 1) * (radius - 1))) {
-                        BlockPos foundBlock = new BlockPos(i, i3 + yPlus, i2);
-                        spherePos.add(foundBlock);
+    private List<BlockPos> getSphere(final BlockPos pos, final float r, final int h, final boolean hollow, final boolean sphere, final int plus_y) {
+        final List<BlockPos> circleblocks = new ArrayList<>();
+        final int cx = pos.getX();
+        final int cy = pos.getY();
+        final int cz = pos.getZ();
+        for (int x = cx - (int) r; x <= cx + r; ++x) {
+            for (int z = cz - (int) r; z <= cz + r; ++z) {
+                for (int y = sphere ? (cy - (int) r) : cy; y < (sphere ? (cy + r) : ((float) (cy + h))); ++y) {
+                    final double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? ((cy - y) * (cy - y)) : 0);
+                    if (dist < r * r && (!hollow || dist >= (r - 1.0f) * (r - 1.0f))) {
+                        final BlockPos l = new BlockPos(x, y + plus_y, z);
+                        circleblocks.add(l);
                     }
                 }
             }
         }
-        return spherePos;
+        return circleblocks;
     }
 
     private boolean validPlacement(BlockPos blockPos){
