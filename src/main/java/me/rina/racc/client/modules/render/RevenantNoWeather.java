@@ -1,10 +1,14 @@
-package me.rina.racc.client.modules.player;
+package me.rina.racc.client.modules.render;
 
 import me.rina.racc.client.RevenantModule;
 
+/**
+ * linus module
+ **/
+
 public class RevenantNoWeather extends RevenantModule {
     public RevenantNoWeather() {
-        super("NoWeather", "NoRain", "Prevents rain", Category.PLAYER);
+        super("NoWeather", "NoWeather", "Prevents rain", Category.RENDER);
     }
 
     @Override

@@ -8,9 +8,13 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+/**
+ * linus module
+ **/
+
 public class RevenantAutoTotem extends RevenantModule {
     public RevenantAutoTotem() {
-        super("AutoTotem", "AutoTotem", "Automatically replaces", Category.COMBAT);
+        super("AutoTotem", "AutoTotem", "Automatically replaces totems", Category.COMBAT);
     }
 
     int totems;

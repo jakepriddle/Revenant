@@ -2,6 +2,10 @@ package me.rina.racc.client.modules.movement;
 
 import me.rina.racc.client.RevenantModule;
 
+/**
+ * ollie module; sorry for the skid :( - linus
+ **/
+
 public class RevenantSprint extends RevenantModule {
     public RevenantSprint() {
         super("Sprint", "Sprint", "Allows player to sprint", Category.MOVEMENT);

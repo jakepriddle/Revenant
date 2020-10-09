@@ -80,10 +80,10 @@ public class RevenantComponent extends RevenantModule {
         this.isStarted = true;
 
         if (hasText) {
-            this.settingSmooth = newSetting(new String[] {"Smooth", tag + "Smooth", "Smooth string font."}, false);
+            this.settingSmooth = newSetting(new String[] {"Smooth", tag + "Smooth", "Smooth string font."}, true);
             this.settingShadow = newSetting(new String[] {"Shadow", tag + "Shadow", "Shadow string effect."}, false);
         } else {
-            this.settingSmooth = new RevenantSetting(new String[] {"Smooth", tag + "Smooth", "Disabled smooth setting."}, false);
+            this.settingSmooth = new RevenantSetting(new String[] {"Smooth", tag + "Smooth", "Disabled smooth setting."}, true);
             this.settingShadow = new RevenantSetting(new String[] {"Shadow", tag + "shadow", "Disabled shadow setting."}, false);
         }
     }

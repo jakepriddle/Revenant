@@ -6,6 +6,10 @@ import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketExplosion;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+/**
+ * linus module
+ **/
+
 public class RevenantVelocity extends RevenantModule {
     public RevenantVelocity() {
         super("Velocity", "Velocity", "Modifies player velocity", Category.MOVEMENT);

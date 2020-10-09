@@ -12,6 +12,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.awt.*;
@@ -24,6 +25,9 @@ import java.util.stream.Collectors;
 import static me.rina.racc.client.modules.render.RevenantHoleESP.Mode.FlatWireFrame;
 import static me.rina.racc.client.modules.render.RevenantHoleESP.Mode.WireFrame;
 
+/**
+ * linus module - prob the only good thing i've done so far
+ **/
 
 public class RevenantHoleESP extends RevenantModule {
     public RevenantHoleESP() {
@@ -31,12 +35,12 @@ public class RevenantHoleESP extends RevenantModule {
     }
 
     private RevenantSetting range = newSetting(new String[] {"Range", "Range", "Range"}, 7, 0, 15);
-    private RevenantSetting obbyRed = newSetting(new String[] {"Obsidian Red", "Obsidian Red", "Color red."}, 255, 0, 255);
-    private RevenantSetting obbyGreen = newSetting(new String[] {"Obsidian Green", "Obsidian Green", "Color green."}, 0, 0, 255);
+    private RevenantSetting obbyRed = newSetting(new String[] {"Obsidian Red", "Obsidian Red", "Color red."}, 83, 0, 255);
+    private RevenantSetting obbyGreen = newSetting(new String[] {"Obsidian Green", "Obsidian Green", "Color green."}, 164, 0, 255);
     private RevenantSetting obbyBlue = newSetting(new String[] {"Obsidian Blue", "Obsidian Blue", "Color blue."}, 255, 0, 255);
     private RevenantSetting bedrockRed = newSetting(new String[] {"Bedrock Red", "Bedrock Red", "Color red."}, 255, 0, 255);
-    private RevenantSetting bedrockGreen = newSetting(new String[] {"Bedrock Green", "Bedrock Green", "Color green."}, 0, 0, 255);
-    private RevenantSetting bedrockBlue = newSetting(new String[] {"Bedrock Blue", "Bedrock Blue", "Color blue."}, 255, 0, 255);
+    private RevenantSetting bedrockGreen = newSetting(new String[] {"Bedrock Green", "Bedrock Green", "Color green."}, 164, 0, 255);
+    private RevenantSetting bedrockBlue = newSetting(new String[] {"Bedrock Blue", "Bedrock Blue", "Color blue."}, 83, 0, 255);
     private RevenantSetting mode = newSetting(new String[] {"Mode", "ModuleMode", "Mode"}, Mode.FlatWireFrame);
 
     private BlockPos render;
@@ -45,7 +49,7 @@ public class RevenantHoleESP extends RevenantModule {
     private static double pitch;
 
     @Listener
-    public void listener(RevenantEventPacket event) {
+    public void packetListener(RevenantEventPacket event) {
         Packet packet = event.getPacket();
         if (packet instanceof CPacketPlayer && isSpoofingAngles) {
             ((CPacketPlayer) packet).yaw = (float) yaw;
@@ -72,35 +76,37 @@ public class RevenantHoleESP extends RevenantModule {
 
     @Override
     public void onRender3D(RevenantEventRender3D event) {
+        GL11.glEnable(2884);
         if (this.render != null) {
             for (BlockPos holepos : this.findObbyHoles()) {
-                if (mode.getEnum() == WireFrame) {
-                    RevenantTessellator.prepare(7);
-                    RevenantTessellator.drawBoundingBoxBlockPos(holepos, 1.5f, new Color(obbyRed.getFloat(), obbyGreen.getFloat(), obbyBlue.getFloat()));
-                    RevenantTessellator.release();
-                } if (mode.getEnum() == FlatWireFrame) {
-                    RevenantTessellator.prepare(7);
-                    RevenantTessellator.drawBoundingBoxBottomBlockPos(holepos, 1.5f, obbyRed.getInteger(), obbyGreen.getInteger(), obbyBlue.getInteger(), 255);
-                    RevenantTessellator.release();
+                switch ((Mode) mode.getEnum()) {
+                    case WireFrame: {
+                        RevenantTessellator.prepare(7);
+                        RevenantTessellator.drawBoundingBoxBlockPos(holepos, 1.5f, new Color(obbyRed.getFloat(), obbyGreen.getFloat(), obbyBlue.getFloat()));
+                        RevenantTessellator.release();
+                    } case FlatWireFrame: {
+                        RevenantTessellator.prepare(7);
+                        RevenantTessellator.drawBoundingBoxBottomBlockPos(holepos, 1.5f, obbyRed.getInteger(), obbyGreen.getInteger(), obbyBlue.getInteger(), 255);
+                        RevenantTessellator.release();
+                    }
                 }
             }
+
             for (BlockPos holepos : this.findBRockHoles()) {
-                if (mode.getEnum() == WireFrame) {
-                    RevenantTessellator.prepare(7);
-                    RevenantTessellator.drawBoundingBoxBlockPos(holepos, 1.5f, new Color(obbyRed.getFloat(), obbyGreen.getFloat(), obbyBlue.getFloat()));
-                    RevenantTessellator.release();
-                } if (mode.getEnum() == FlatWireFrame) {
-                    RevenantTessellator.prepare(7);
-                    RevenantTessellator.drawBoundingBoxBottomBlockPos(holepos, 1.5f, bedrockRed.getInteger(), bedrockGreen.getInteger(), bedrockBlue.getInteger(), 255);
-                    RevenantTessellator.release();
+                switch ((Mode) mode.getEnum()) {
+                    case WireFrame: {
+                        RevenantTessellator.prepare(7);
+                        RevenantTessellator.drawBoundingBoxBlockPos(holepos, 1.5f, new Color(obbyRed.getFloat(), obbyGreen.getFloat(), obbyBlue.getFloat()));
+                        RevenantTessellator.release();
+                    } case FlatWireFrame: {
+                        RevenantTessellator.prepare(7);
+                        RevenantTessellator.drawBoundingBoxBottomBlockPos(holepos, 1.5f, bedrockRed.getInteger(), bedrockGreen.getInteger(), bedrockBlue.getInteger(), 255);
+                        RevenantTessellator.release();
+                    }
                 }
+
             }
         }
-    }
-
-    private void lookAtPacket(double px, double py, double pz, EntityPlayer me) {
-        double[] v = RevenantEntityInterpolizerUtil.calculateLookAt(px, py, pz, me);
-        RevenantHoleESP.setYawAndPitch((float)v[0], (float)v[1]);
     }
 
     private boolean IsObbyHole(BlockPos blockPos) {
@@ -171,12 +177,6 @@ public class RevenantHoleESP extends RevenantModule {
             ++x;
         }
         return circleblocks;
-    }
-
-    private static void setYawAndPitch(float yaw1, float pitch1) {
-        yaw = yaw1;
-        pitch = pitch1;
-        isSpoofingAngles = true;
     }
 
     private static void resetRotation() {

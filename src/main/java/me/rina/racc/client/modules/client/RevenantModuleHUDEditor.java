@@ -20,8 +20,8 @@ import me.rina.racc.Revenant;
  *
  **/
 public class RevenantModuleHUDEditor extends RevenantModule {
-    private RevenantSetting componentColorStringR = newSetting(new String[] {"Component String Red", "ComponentColorStringRed", "Set color string red."}, 0, 0, 255);
-    private RevenantSetting componentColorStringG = newSetting(new String[] {"Component String Green", "ComponentColorStringGreen", "Set color string green."}, 0, 0, 255);
+    private RevenantSetting componentColorStringR = newSetting(new String[] {"Component String Red", "ComponentColorStringRed", "Set color string red."}, 255, 0, 255);
+    private RevenantSetting componentColorStringG = newSetting(new String[] {"Component String Green", "ComponentColorStringGreen", "Set color string green."}, 255, 0, 255);
     private RevenantSetting componentColorStringB = newSetting(new String[] {"Component String Blue", "ComponentColorStringBlue", "Set color string blue."}, 255, 0, 255);
 
     private boolean showGUI = true;

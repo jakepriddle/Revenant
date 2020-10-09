@@ -15,19 +15,19 @@ import me.rina.racc.util.client.RevenantChatUtil;
 
 // Revenant.
 import me.rina.racc.Revenant;
-import me.rina.turok.render.TurokRenderGL;
-import net.minecraft.client.gui.Gui;
 
 /**
  *
  * @author Rina.
  * @since 04/10/2020.
  *
+ * updated by linus on 08/09/2020
+ *
  **/
 public class RevenantComponentArrayList extends RevenantComponent {
     private RevenantSetting rgb_effect = newSetting(new String[] {"RGB", "ComponentArrayListHUDRGB", "ArrayList utils."}, false);
-    private RevenantSetting background = newSetting(new String[] {"Background", "ComponentArrayListHUDBackground", "ArrayList utils."}, false);
-    private RevenantSetting hud_info_separator = newSetting(new String[] {"HUD Info", "ArrayListHUDModuleHUDInfo", "ArrayList utils."}, false);
+    private RevenantSetting hud_info_separator = newSetting(new String[] {"Module[HUDInfo]", "ArrayListHUDModuleHUDInfo", "ArrayList utils."}, false);
+    private RevenantSetting category = newSetting(new String[] {"Category", "Category", "Category"}, true);
 
     List<RevenantModule> pretty_modules;
 
@@ -38,8 +38,8 @@ public class RevenantComponentArrayList extends RevenantComponent {
     @Override
     public void onRenderHUD(int mousePositionX, int mousePositionY, int scaledWidth, int scaledHeight, int[] colorHudRGB, float partialTicks) {
         Comparator<RevenantModule> comparator = (module_1, module_2) -> {
-            String module_1_string = module_1.getTag() + (module_1.getHUDInfo().equals("") == true ? "" : RevenantChatUtil.GRAY + " [" + RevenantChatUtil.RESET + module_1.getHUDInfo() + RevenantChatUtil.GRAY + "]" + RevenantChatUtil.RESET);
-            String module_2_string = module_2.getTag() + (module_2.getHUDInfo().equals("") == true ? "" : RevenantChatUtil.GRAY + " [" + RevenantChatUtil.RESET + module_2.getHUDInfo() + RevenantChatUtil.GRAY + "]" + RevenantChatUtil.RESET);
+            String module_1_string = module_1.getTag() + (module_1.getHUDInfo().equals("") == true ? "" : RevenantChatUtil.GRAY + " [" + RevenantChatUtil.WHITE + module_1.getHUDInfo() + RevenantChatUtil.GRAY + "]" + RevenantChatUtil.RESET);
+            String module_2_string = module_2.getTag() + (module_2.getHUDInfo().equals("") == true ? "" : RevenantChatUtil.GRAY + " [" + RevenantChatUtil.WHITE + module_2.getHUDInfo() + RevenantChatUtil.GRAY + "]" + RevenantChatUtil.RESET);
 
             float diff = getStringWidth(module_2_string) - getStringWidth(module_1_string);
 
@@ -71,9 +71,31 @@ public class RevenantComponentArrayList extends RevenantComponent {
             if (rgb_effect.getBoolean()) {
                 renderString(module_name, 0, position_update_y, colorHudRGB[0], colorHudRGB[1], colorHudRGB[2], 255);
             } else {
-                renderString(module_name, 0, position_update_y, 255);
+                if (category.getBoolean()) {
+                    if (modules.getCategory() == Category.CLIENT) {
+                        renderString(module_name, 0, position_update_y, 50, 168, 82, 255);
+                    }
+                    if (modules.getCategory() == Category.COMBAT) {
+                        renderString(module_name, 0, position_update_y, 90, 125, 214, 255);
+                    }
+                    if (modules.getCategory() == Category.EXPLOIT) {
+                        renderString(module_name, 0, position_update_y, 222, 209, 73, 255);
+                    }
+                    if (modules.getCategory() == Category.MISC) {
+                        renderString(module_name, 0, position_update_y, 100, 73, 222, 255);
+                    }
+                    if (modules.getCategory() == Category.PLAYER) {
+                        renderString(module_name, 0, position_update_y, 73, 222, 78, 255);
+                    }
+                    if (modules.getCategory() == Category.RENDER) {
+                        renderString(module_name, 0, position_update_y, 201, 81, 161, 255);
+                    }
+                    if (modules.getCategory() == Category.MOVEMENT) {
+                        renderString(module_name, 0, position_update_y, 222, 91, 132, 255);
+                    }
+                }
+                else {renderString(module_name, 0, position_update_y, 255);}
             };
-
 
             position_update_y += getStringHeight(module_name);
 

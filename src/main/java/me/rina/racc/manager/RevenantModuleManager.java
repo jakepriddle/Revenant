@@ -4,11 +4,13 @@ package me.rina.racc.manager;
 import me.rina.racc.client.modules.combat.RevenantAutoCrystal;
 import me.rina.racc.client.modules.combat.RevenantAutoTotem;
 import me.rina.racc.client.modules.combat.RevenantCombatInfo;
+import me.rina.racc.client.modules.misc.RevenantFakePlayer;
 import me.rina.racc.client.modules.movement.RevenantSprint;
+import me.rina.racc.client.modules.movement.RevenantStep;
 import me.rina.racc.client.modules.movement.RevenantVelocity;
 import me.rina.racc.client.modules.player.RevenantAutoReplenish;
 import me.rina.racc.client.modules.player.RevenantFastUse;
-import me.rina.racc.client.modules.player.RevenantNoWeather;
+import me.rina.racc.client.modules.render.RevenantNoWeather;
 import me.rina.racc.client.modules.exploit.RevenantTimer;
 import me.rina.racc.client.modules.render.RevenantHoleESP;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -59,6 +61,7 @@ public class RevenantModuleManager {
         // Client category modules.
         addModuleInList(new RevenantModuleGUI());
         addModuleInList(new RevenantModuleHUDEditor());
+        addModuleInList(new RevenantCapes());
 
         // Combat category modules.
         addModuleInList(new RevenantAutoCrystal());
@@ -71,6 +74,7 @@ public class RevenantModuleManager {
         // Movement category modules.
         addModuleInList(new RevenantVelocity());
         addModuleInList(new RevenantSprint());
+        addModuleInList(new RevenantStep());
 
         // Player category modules.
         addModuleInList(new RevenantFastUse());
@@ -80,8 +84,12 @@ public class RevenantModuleManager {
         // Render category modules.
         addModuleInList(new RevenantHoleESP());
 
+        // Misc category modules.
+        addModuleInList(new RevenantFakePlayer());
+
         // Overlay components.
         addComponentInList(new RevenantComponentArrayList());
+
     }
 
     public void onSaveModuleList() {
