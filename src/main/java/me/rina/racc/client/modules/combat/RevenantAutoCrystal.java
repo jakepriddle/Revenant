@@ -4,10 +4,14 @@ import me.rina.racc.Revenant;
 import me.rina.racc.client.RevenantModule;
 import me.rina.racc.client.RevenantSetting;
 import me.rina.racc.util.misc.Pair;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -15,10 +19,16 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.CombatRules;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,6 +56,8 @@ public class RevenantAutoCrystal extends RevenantModule {
     private RevenantSetting placeRange = newSetting(new String[]{"PlaceRange", "ACPlaceRange", "PlaceRange"}, 4.4, 0.0, 10.0);
     private RevenantSetting placeDelay = newSetting(new String[]{"PlaceDelay", "ACPlaceDelay", "PlaceDelay"}, 1, 0, 10);
     private RevenantSetting enemyRange = newSetting(new String[]{"EnemyRange", "ACEnemyRange", "EnemyRange"}, 6.0, 0.0, 20.0);
+    private RevenantSetting minDamage = newSetting(new String[]{"MinDamage", "ACMinDamage", "MinDamage"}, 5.0, 1.0, 36.0);
+    private RevenantSetting maxSelfDamage = newSetting(new String[]{"MaxSelfDamage", "ACMaxSelfDamage", "MaxSelfDamage"}, 10.0, 1.0, 36.0);
     private RevenantSetting antiSuicide = newSetting(new String[]{"AntiSuicide", "ACAntiSuicide", "AntiSuicide"}, true);
     private RevenantSetting antiSuicideHealth = newSetting(new String[]{"SuicideHealth", "ACSuicideHealth", "SuicideHealth"}, 10, 0, 36);
     private RevenantSetting rotate = newSetting(new String[]{"Rotate", "ACRotate", "Rotate"}, true);
@@ -210,7 +222,13 @@ public class RevenantAutoCrystal extends RevenantModule {
                         boolean offhandCheck = false;
                         EnumFacing enumFacing = EnumFacing.NORTH; //todo, north is temp
 
-                        //todo: raytrace, offhand check, and autoswitch
+                        if (mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL){
+                            offhandCheck = true;
+                        }
+                        else {
+                            offhandCheck = false;
+                            switchToCrystals();
+                        }
 
                         if (placeDelayInt <= placeDelay.getInteger()){
                             placeDelayInt = 0;
@@ -234,7 +252,7 @@ public class RevenantAutoCrystal extends RevenantModule {
                         }
                         placeDelayInt++;
                         isPlacing = false;
-            });
+                    });
         }
     }
 
@@ -246,6 +264,9 @@ public class RevenantAutoCrystal extends RevenantModule {
             return false;
         }
         if (target.isDead || target.isCreative()){
+            return false;
+        }
+        if (!(target instanceof EntityLivingBase)){
             return false;
         }
         //friend
@@ -273,14 +294,18 @@ public class RevenantAutoCrystal extends RevenantModule {
         BlockPos targetBlockPos = new BlockPos(target.posX, target.posY, target.posZ);
 
         List<BlockPos> possibleBlocks = getPossibleBlocks(targetBlockPos);
-        List<Pair<Double, BlockPos>> calculatedBlocks = new ArrayList<>();
+        List<Pair<Float, BlockPos>> calculatedBlocks = new ArrayList<>();
 
         for (BlockPos blockPos : possibleBlocks){
-            int damageDealt = calculateDamage(blockPos, target);
-            calculatedBlocks.add(new Pair(damageDealt, blockPos)); //this should work
+            float damageDealt = calculateDamage(blockPos, target);
+            float selfDamageDealt = calculateDamage(blockPos, mc.player);
+
+            if (damageDealt < minDamage.getDouble() && selfDamageDealt <= maxSelfDamage.getDouble()){
+                calculatedBlocks.add(new Pair(damageDealt, blockPos)); //this should work
+            }
         }
 
-        //come up with a method to find the highest damage pairing
+        //todo: come up with a method to find the highest damage pairing
 
         return bestBlockPos;
     }
@@ -323,14 +348,12 @@ public class RevenantAutoCrystal extends RevenantModule {
             if (mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(upOne)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(upTwo)).isEmpty()) {
                 switch ((PlaceLogic) placeLogic.getEnum()) {
                     case DEFAULT: {
-                        if (mc.world.getBlockState(upOne).getBlock() == Blocks.AIR || mc.world.getBlockState(upOne).getBlock() == Blocks.WEB){
-                            if (mc.world.getBlockState(upTwo).getBlock() == Blocks.AIR || mc.world.getBlockState(upTwo).getBlock() == Blocks.WEB){
-                                return true;
-                            }
+                        if (mc.world.getBlockState(upOne).getBlock() == Blocks.AIR && mc.world.getBlockState(upTwo).getBlock() == Blocks.AIR){
+                            return true;
                         }
                     }
                     case THIRTEEN: {
-                        if (mc.world.getBlockState(upOne).getBlock() == Blocks.AIR || mc.world.getBlockState(upOne).getBlock() == Blocks.WEB){
+                        if (mc.world.getBlockState(upOne).getBlock() == Blocks.AIR){
                             return true;
                         }
                     }
@@ -340,9 +363,53 @@ public class RevenantAutoCrystal extends RevenantModule {
         return false;
     }
 
-    private int calculateDamage(BlockPos blockPos, EntityPlayer target){
-        int damage = 0;
+    private float calculateDamage(BlockPos blockPos, EntityPlayer target){
+        float damage = 1.0F;
+
+        float explosionDamage = 12.0F;
+        double distanceFromExplosion = target.getDistance(blockPos.x, blockPos.y, blockPos.z) / (double) explosionDamage;
+        Vec3d vec3d = new Vec3d(blockPos.x, blockPos.y, blockPos.z);
+
+        double blockDensity = target.world.getBlockDensity(vec3d, target.getEntityBoundingBox());
+        double densityDistance = (1 - distanceFromExplosion) * blockDensity;
+        float damageForExplosion = (float) ((int) ((densityDistance * densityDistance + densityDistance) / 2.0D * 7.0D * (double) explosionDamage + 1.0D));
+
+        if (target instanceof EntityLivingBase){
+            damage = adjustForBlastProtection(target, getDamageForDifficulty(damageForExplosion), new Explosion(mc.world, null, blockPos.x, blockPos.y, blockPos.z, 6F, false, true));
+        }
 
         return damage;
+    }
+
+    private float adjustForBlastProtection(EntityPlayer entity, float damageIn, Explosion explosion) {
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer entityPlayer = entity;
+            DamageSource damageSource = DamageSource.causeExplosionDamage(explosion);
+            damageIn = CombatRules.getDamageAfterAbsorb(damageIn, (float) entityPlayer.getTotalArmorValue(), (float) entityPlayer.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+
+            int enchantmentModifierDamage = EnchantmentHelper.getEnchantmentModifierDamage(entityPlayer.getArmorInventoryList(), damageSource);
+            float enchantmentAdjusted = MathHelper.clamp(enchantmentModifierDamage, 0.0F, 20.0F);
+            damageIn *= 1.0F - enchantmentAdjusted / 25.0F;
+
+            if (entity.isPotionActive(Potion.getPotionById(11))) {
+                damageIn = damageIn - (damageIn / 4);
+            }
+
+            damageIn = Math.max(damageIn, 0.0F);
+            return damageIn;
+        }
+
+        damageIn = CombatRules.getDamageAfterAbsorb(damageIn, (float) entity.getTotalArmorValue(), (float) entity.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+        return damageIn;
+    }
+
+    private float getDamageForDifficulty(float damageIn){
+        int difficulty = mc.world.getDifficulty().getId();
+
+        return damageIn * (difficulty == 0 ? 0 : (difficulty == 2 ? 1 : (difficulty == 1 ? 0.5f : 1.5f)));
+    }
+
+    private void switchToCrystals(){
+
     }
 }
