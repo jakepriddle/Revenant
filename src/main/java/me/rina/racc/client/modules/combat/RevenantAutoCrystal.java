@@ -112,6 +112,9 @@ public class RevenantAutoCrystal extends RevenantModule {
                 breakCrystal();
                 break;
             }
+            default: {
+                return;
+            }
         }
 
         isActive = false;
@@ -175,10 +178,13 @@ public class RevenantAutoCrystal extends RevenantModule {
                             switch ((HandLogic) handLogic.getEnum()) {
                                 case MAINHAND: {
                                     mc.player.swingArm(EnumHand.MAIN_HAND);
+                                    break;
                                 }
                                 case OFFHAND: {
                                     mc.player.swingArm(EnumHand.OFF_HAND);
+                                    break;
                                 }
+                                default: return;
                             }
                             if (desyncBreak.getBoolean()) {
                                 crystal.setDead();
@@ -377,6 +383,7 @@ public class RevenantAutoCrystal extends RevenantModule {
                             return true;
                         }
                     }
+                    default: return false;
                 }
             }
         }
@@ -387,8 +394,8 @@ public class RevenantAutoCrystal extends RevenantModule {
         float damage = 0.0F;
 
         float explosionDamage = 12.0F;
-        double distanceFromExplosion = target.getDistance(blockPos.x, blockPos.y, blockPos.z) / (double) explosionDamage;
-        Vec3d vec3d = new Vec3d(blockPos.x, blockPos.y, blockPos.z);
+        double distanceFromExplosion = target.getDistance(blockPos.getX(), blockPos.getY(), blockPos.getZ()) / (double) explosionDamage;
+        Vec3d vec3d = new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
         double blockDensity = target.world.getBlockDensity(vec3d, target.getEntityBoundingBox());
         double densityDistance = (1 - distanceFromExplosion) * blockDensity;
