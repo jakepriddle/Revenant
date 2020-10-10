@@ -83,9 +83,10 @@ public class RevenantAutoCrystal extends RevenantModule {
     private boolean isPlacing = false;
     private boolean isActive = false;
     private boolean isWeaknessSwitched = false;
-    private long breakSystemTime;
     private int placeDelayInt = 0;
+    private long breakSystemTime = 0;
 
+    @Override
     public void onUpdate(){
         isActive = true;
 
@@ -104,10 +105,12 @@ public class RevenantAutoCrystal extends RevenantModule {
             case BREAKPLACE: {
                 breakCrystal();
                 placeCrystal();
+                break;
             }
             case PLACEBREAK: {
                 placeCrystal();
                 breakCrystal();
+                break;
             }
         }
 
@@ -122,6 +125,10 @@ public class RevenantAutoCrystal extends RevenantModule {
                     .sorted(Comparator.comparing(crystal -> crystal.getDistance(mc.player))) //might change this
                     .forEach(crystal -> {
                         if (crystal == null) {
+                            return;
+                        }
+
+                        if (crystal.getDistance(mc.player) > breakRange.getDouble()){
                             return;
                         }
 
@@ -210,9 +217,21 @@ public class RevenantAutoCrystal extends RevenantModule {
                     .sorted(Comparator.comparing(entityPlayer -> entityPlayer.getDistance(mc.player)))
                     .forEach(entityPlayer -> {
 
+                        if (entityPlayer == mc.player){
+                            return;
+                        }
+
+                        if (entityPlayer.getDistance(mc.player) > enemyRange.getDouble()){
+                            return;
+                        }
+
                         BlockPos targetBlock = getBestBlock(entityPlayer);
 
                         if (targetBlock == null){
+                            return;
+                        }
+
+                        if (targetBlock.getDistance((int) mc.player.posX, (int) mc.player.posY, (int) mc.player.posZ) > placeRange.getDouble()){
                             return;
                         }
 
@@ -292,6 +311,7 @@ public class RevenantAutoCrystal extends RevenantModule {
         }
 
         List<BlockPos> possibleBlocks = getPossibleBlocks();
+        possibleBlocks.sort(Comparator.comparing(blockPos -> calculateDamage(blockPos, target)));
 
         double previousDamage = 0;
 
