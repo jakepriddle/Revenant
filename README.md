@@ -23,6 +23,8 @@ Revenant is a utility mod for Minecraft anarchy servers. Most of the code is wri
 
 [Jrexpc (Jake)](https://github.com/Jrepxc) 
 
+[15637 Programmer! (Reap)](https://github.com/yagel15637)
+
 Mitch Fang
 
 # Credits
