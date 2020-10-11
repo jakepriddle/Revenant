@@ -17,7 +17,7 @@ import me.rina.racc.Revenant;
  **/
 public class RevenantWidget {
     public TurokRect rect;
-
+//change for test
     /* Public events flag */
     public boolean isMouseOver;
     public boolean isMouseClicked;
