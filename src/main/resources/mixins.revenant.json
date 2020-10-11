@@ -5,6 +5,7 @@
   "refmap"             : "mixins.revenant.refmap.json",
   "mixins"             : [
     "RevenantMixinNetworkManager",
-    "RevenantMinecraftMixin"
+    "RevenantMinecraftMixin",
+    "RevenantMixinAbstractClientPlayer"
   ]
 }

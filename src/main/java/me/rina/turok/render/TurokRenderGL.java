@@ -28,6 +28,7 @@ import me.rina.turok.math.TurokRect;
  * - Special render to Revenant client.
  *
  **/
+
 public class TurokRenderGL {
     private static final Minecraft mc = Minecraft.getMinecraft();
 

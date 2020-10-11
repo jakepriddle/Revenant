@@ -21,11 +21,11 @@ public class RevenantModuleGUI extends RevenantModule {
 
     private RevenantSetting colorNameRed = newSetting(new String[] {"Name Color Red", "GUINameColorRed", "Color red."}, 255, 0, 255);
     private RevenantSetting colorNameGreen = newSetting(new String[] {"Name Color Green", "GUINameColorGreen", "Color green."}, 255, 0, 255);
-    private RevenantSetting colorNameBlue = newSetting(new String[] {"Name Color Blue", "GUINameColorBlue", "Color blue."}, 0, 0, 255);
+    private RevenantSetting colorNameBlue = newSetting(new String[] {"Name Color Blue", "GUINameColorBlue", "Color blue."}, 255, 0, 255);
 
     private RevenantSetting colorBaseRGB = newSetting(new String[] {"Base RGB", "GUIBaseRGB", "RGB base buttons."}, false);
-    private RevenantSetting colorBaseRed = newSetting(new String[] {"Base Color Red", "GUIBaseColorRed", "Color red."}, 255, 0, 255);
-    private RevenantSetting colorBaseGreen = newSetting(new String[] {"Base Color Green", "GUIBaseColorGreen", "Color green."}, 0, 0, 255);
+    private RevenantSetting colorBaseRed = newSetting(new String[] {"Base Color Red", "GUIBaseColorRed", "Color red."}, 83, 0, 255);
+    private RevenantSetting colorBaseGreen = newSetting(new String[] {"Base Color Green", "GUIBaseColorGreen", "Color green."}, 164, 0, 255);
     private RevenantSetting colorBaseBlue = newSetting(new String[] {"Base Color Blue", "GUIBaseColorBlue", "Color blue."}, 255, 0, 255);
 
     private RevenantSetting colorBackgroundRGB = newSetting(new String[] {"Background RGB", "GUIBackgroundRGB", "RGB background frame."}, false);

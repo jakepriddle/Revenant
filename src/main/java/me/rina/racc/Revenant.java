@@ -15,6 +15,8 @@ import java.awt.*;
 import java.io.*;
 
 // Minecraft.
+import me.rina.racc.util.client.RevenantCapeUtil;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraft.client.Minecraft;
 
 // Pomelo event manager.
+import org.lwjgl.opengl.Display;
 import team.stiff.pomelo.impl.annotated.AnnotatedEventManager;
 import team.stiff.pomelo.EventManager;
 
@@ -78,11 +81,20 @@ public class Revenant {
     private RevenantMainGUI revenantGUI;
     private RevenantThemeConstructor revenantGUITheme;
 
+    // cape stuff
+    public RevenantCapeUtil capeUtils;
+
     /**
      * System:
      * - Make effective controller to all client.
      **/
     private RevenantSystem systemController;
+
+    @Mod.EventHandler
+    public void clientPreInitializer(FMLPreInitializationEvent event){
+        Display.setTitle(NAME + " Utility Mod " + VERSION);
+    }
+
 
     @Mod.EventHandler
     public void clientInitializer(FMLInitializationEvent event) {
@@ -91,7 +103,7 @@ public class Revenant {
         this.commandManager   = new RevenantCommandManager("commands");
         this.socialUserManager    = new RevenantSocialManager();
 
-        // We initialize event maanger pomelo.
+        // We initialize event manager pomelo.
         this.eventManager = new AnnotatedEventManager();
 
         this.revenantGUI = new RevenantMainGUI();
@@ -112,6 +124,11 @@ public class Revenant {
         } catch (Exception exc) {
             exc.printStackTrace();
         }
+    }
+
+    @Mod.EventHandler
+    public void clientPostInitializer(FMLPostInitializationEvent event) {
+        capeUtils = new RevenantCapeUtil();
     }
 
     public static RevenantMainGUI getGUIClient() {
