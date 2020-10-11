@@ -4,6 +4,7 @@ package me.rina.racc.manager;
 import me.rina.racc.client.modules.combat.RevenantAutoCrystal;
 import me.rina.racc.client.modules.combat.RevenantAutoTotem;
 import me.rina.racc.client.modules.combat.RevenantCombatInfo;
+import me.rina.racc.client.modules.combat.RevenantOffhand;
 import me.rina.racc.client.modules.misc.RevenantFakePlayer;
 import me.rina.racc.client.modules.movement.RevenantSprint;
 import me.rina.racc.client.modules.movement.RevenantStep;
@@ -67,6 +68,7 @@ public class RevenantModuleManager {
         addModuleInList(new RevenantAutoCrystal());
         addModuleInList(new RevenantCombatInfo());
         addModuleInList(new RevenantAutoTotem());
+        addModuleInList(new RevenantOffhand());
 
         // Exploit category modules.
         addModuleInList(new RevenantTimer());
