@@ -9,6 +9,7 @@ import me.rina.racc.client.modules.movement.RevenantStep;
 import me.rina.racc.client.modules.movement.RevenantVelocity;
 import me.rina.racc.client.modules.player.RevenantAutoReplenish;
 import me.rina.racc.client.modules.player.RevenantFastUse;
+import me.rina.racc.client.modules.render.RevenantFullbright;
 import me.rina.racc.client.modules.render.RevenantNoWeather;
 import me.rina.racc.client.modules.exploit.RevenantTimer;
 import me.rina.racc.client.modules.render.RevenantHoleESP;
@@ -85,6 +86,7 @@ public class RevenantModuleManager {
 
         // Render category modules.
         addModuleInList(new RevenantHoleESP());
+        addModuleInList(new RevenantFullbright());
 
         // Misc category modules.
         addModuleInList(new RevenantFakePlayer());
