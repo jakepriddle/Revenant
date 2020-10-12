@@ -37,21 +37,18 @@ public class RevenantFastUse extends RevenantModule
             if (this.crystal.getBoolean()) {
                 mc.rightClickDelayTimer = 0;
             }
-        } else if (Block.getBlockFromItem((Item)mc.player.getHeldItemMainhand().getItem()).getDefaultState().isFullBlock()) {
+        } else if (Block.getBlockFromItem(mc.player.getHeldItemMainhand().getItem()).getDefaultState().isFullBlock()) {
             if (this.blocks.getBoolean()) {
                 mc.rightClickDelayTimer = 0;
-            }
-            if (this.bow.getBoolean()) {
-                Minecraft mc = Minecraft.getMinecraft();
-                if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBow && mc.player.isHandActive() && mc.player.getItemInUseMaxCount() >= 3) {
-                    mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, mc.player.getHorizontalFacing()));
-                    mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItem(mc.player.getActiveHand()));
-                    mc.player.stopActiveHand();
-                }
-
-
             } else if (this.other.getBoolean() && !(mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock)) {
                 mc.rightClickDelayTimer = 0;
             }
+        } else if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBow && mc.player.isHandActive() && mc.player.getItemInUseMaxCount() >= 3) {
+            if (this.bow.getBoolean()) {
+                mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, mc.player.getHorizontalFacing()));
+                mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(mc.player.getActiveHand()));
+                mc.player.stopActiveHand();
+            }
         }
-}}
+    }
+}

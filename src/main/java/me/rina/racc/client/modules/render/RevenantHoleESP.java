@@ -2,6 +2,7 @@ package me.rina.racc.client.modules.render;
 
 import me.rina.racc.client.RevenantModule;
 import me.rina.racc.client.RevenantSetting;
+import me.rina.racc.event.Handler;
 import me.rina.racc.event.network.RevenantEventPacket;
 import me.rina.racc.event.render.RevenantEventRender3D;
 import me.rina.racc.util.entity.RevenantEntityInterpolizerUtil;
@@ -48,7 +49,7 @@ public class RevenantHoleESP extends RevenantModule {
     private static double yaw;
     private static double pitch;
 
-    @Listener
+    @Handler
     public void packetListener(RevenantEventPacket event) {
         Packet packet = event.getPacket();
         if (packet instanceof CPacketPlayer && isSpoofingAngles) {
@@ -74,7 +75,7 @@ public class RevenantHoleESP extends RevenantModule {
         this.render = shouldRender;
     }
 
-    @Override
+    @Handler
     public void onRender3D(RevenantEventRender3D event) {
         GL11.glEnable(2884);
         if (this.render != null) {
@@ -153,7 +154,7 @@ public class RevenantHoleESP extends RevenantModule {
     }
 
     public List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plus_y) {
-        ArrayList<BlockPos> circleblocks = new ArrayList<BlockPos>();
+        ArrayList<BlockPos> circleblocks = new ArrayList<>();
         int cx = loc.getX();
         int cy = loc.getY();
         int cz = loc.getZ();
@@ -195,7 +196,7 @@ public class RevenantHoleESP extends RevenantModule {
 
     public enum Mode {
         FlatWireFrame,
-        WireFrame;
+        WireFrame
     }
 }
 

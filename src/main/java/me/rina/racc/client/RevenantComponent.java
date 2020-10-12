@@ -4,24 +4,18 @@ package me.rina.racc.client;
 import com.google.gson.*;
 
 // Java.
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.time.*;
-import java.util.*;
-import java.awt.*;
 import java.io.*;
 
 // Minecraft.
-import net.minecraft.client.renderer.GlStateManager;
+import me.rina.racc.event.Handler;
+import me.rina.racc.event.render.RevenantEventRender2D;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.Gui;
 
 // OpenGL.
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 // Turok.
 import me.rina.turok.font.TurokFontManager;
@@ -88,7 +82,7 @@ public class RevenantComponent extends RevenantModule {
         }
     }
 
-    @Override
+    @Handler
     public void onRender3D(RevenantEventRender3D event) {
         if (mc.world == null || mc.player == null) {
             return;
@@ -97,8 +91,8 @@ public class RevenantComponent extends RevenantModule {
         this.eventPartialTicks = event.getPartialTicks();
     }
 
-    @Override
-    public void onRender2D() {
+    @Handler
+    public void onRender2D(RevenantEventRender2D event) {
         ScaledResolution scaledResolution = new ScaledResolution(mc);
 
         this.scaledWidth  = scaledResolution.getScaledWidth();

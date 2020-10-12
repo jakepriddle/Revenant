@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.Mixin;
 
-// Java.
-import java.io.IOException;
-
 // Event.
 import me.rina.racc.event.network.RevenantEventPacket;
 import me.rina.racc.event.RevenantEvent;
@@ -35,7 +32,7 @@ public abstract class RevenantMixinNetworkManager {
     private void sendPacket(Packet<?> packet, CallbackInfo callback) {
         RevenantEventPacket event = new RevenantEventPacket.Send(RevenantEvent.Stage.PRE, packet);
 
-        Revenant.getPomeloEventManager().dispatchEvent(event);
+        Revenant.getInstance().revEventManager.dispatch(event);
 
         if (event.isCancelled()) {
             callback.cancel();
@@ -46,7 +43,7 @@ public abstract class RevenantMixinNetworkManager {
     private void receivePacket(ChannelHandlerContext context, Packet<?> packet, CallbackInfo callback) {
         RevenantEventPacket event = new RevenantEventPacket.Receive(RevenantEvent.Stage.POST, packet);
 
-        Revenant.getPomeloEventManager().dispatchEvent(event);
+        Revenant.getInstance().revEventManager.dispatch(event);
 
         if (event.isCancelled()) {
             callback.cancel();

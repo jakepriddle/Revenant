@@ -1,6 +1,7 @@
 package me.rina.racc.client.modules.client;
 
 // Minecraft.
+import me.rina.racc.event.Handler;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 
 // Pomelo.
@@ -38,14 +39,14 @@ public class RevenantTestModule extends RevenantModule {
 
     public enum Mode {
         RELOAD,
-        UNLOADED;
+        UNLOADED
     }
 
     public RevenantTestModule() {
         super("Test Module", "TestModule", "Dev module for test.", Category.CLIENT);
     }
 
-    @Listener
+    @Handler
     public void listenPacketReceive(RevenantEventPacket.Send event) {
         if (event.getPacket() instanceof CPacketCloseWindow && xcare.getBoolean()) {
             event.cancel();
@@ -54,17 +55,13 @@ public class RevenantTestModule extends RevenantModule {
 
     @Override
     public void onUpdate() {
-        switch ((Mode) mode.getEnum()) {
-            case RELOAD : {
-                if (clock.isPassedSI(slider.getInteger())) {
-                    double[] lastPos = RevenantMathPlayerUtil.getPosition();
+        if (mode.getEnum() == Mode.RELOAD) {
+            if (clock.isPassedSI(slider.getInteger())) {
+                double[] lastPos = RevenantMathPlayerUtil.getPosition();
 
-                    RevenantChatUtil.sendClientMessage(Revenant.CHAT + "Me " + mc.player.getName() + " am in " + lastPos[0] + "x " + lastPos[1] + "y " + lastPos[2] + "z;");
+                RevenantChatUtil.sendClientMessage(Revenant.CHAT + "Me " + mc.player.getName() + " am in " + lastPos[0] + "x " + lastPos[1] + "y " + lastPos[2] + "z;");
 
-                    clock.resetTimer();
-                }
-
-                break;
+                clock.resetTimer();
             }
         }
     }

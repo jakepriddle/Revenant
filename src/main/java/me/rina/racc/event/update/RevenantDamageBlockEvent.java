@@ -12,7 +12,7 @@ public class RevenantDamageBlockEvent extends RevenantEvent
     private BlockPos pos;
     private EnumFacing face;
 
-    public RevenantDamageBlockEvent(BlockPos pos, EnumFacing face){
+    public RevenantDamageBlockEvent(BlockPos pos, EnumFacing face) {
         this.pos = pos;
         this.face = face;
     }
