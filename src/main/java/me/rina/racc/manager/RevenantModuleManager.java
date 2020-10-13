@@ -68,6 +68,7 @@ public class RevenantModuleManager {
         addModuleInList(new RevenantAutoTotem());
         addModuleInList(new RevenantBedAura());
         addModuleInList(new RevenantCombatInfo());
+        addModuleInList(new RevenantBurrow());
         addModuleInList(new RevenantOffhand());
 
         // Exploit category modules.
