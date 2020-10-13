@@ -1,7 +1,6 @@
 package me.rina.racc.event.render;
 
 // Event.
-import me.rina.racc.event.RevenantEventStage;
 import me.rina.racc.event.RevenantEvent;
 
 /**

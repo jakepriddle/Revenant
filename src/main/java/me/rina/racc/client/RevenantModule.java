@@ -105,9 +105,6 @@ public class RevenantModule {
      **/
     public void onDisable() {}
 
-    public void onRender2D() {}
-    public void onRender3D(RevenantEventRender3D event) {}
-
     public void setEnabled() {
         this.settingModuleListener.setBoolean(true);
 
@@ -116,8 +113,6 @@ public class RevenantModule {
         if (this.settingModuleNotify.getBoolean()) {
             RevenantChatUtil.sendClientMessage(Revenant.CHAT + RevenantChatUtil.GREEN + this.tag);
         }
-
-        Revenant.getPomeloEventManager().addEventListener(this);
     }
 
     public void setDisabled() {
@@ -128,8 +123,6 @@ public class RevenantModule {
         if (this.settingModuleNotify.getBoolean()) {
             RevenantChatUtil.sendClientMessage(Revenant.CHAT + RevenantChatUtil.RED + this.tag);
         }
-
-        Revenant.getPomeloEventManager().removeEventListener(this);
     }
 
     public void setName(String name) {

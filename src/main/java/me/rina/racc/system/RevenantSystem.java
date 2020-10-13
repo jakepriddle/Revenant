@@ -1,13 +1,12 @@
 package me.rina.racc.system;
 
 // Minecraft.
+import me.rina.racc.event.render.RevenantEventRender2D;
+import me.rina.racc.event.render.RevenantEventRender3D;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraft.network.play.server.SPacketPlayerListItem;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraftforge.client.event.*;
 import net.minecraft.client.Minecraft;
@@ -57,13 +56,6 @@ public class RevenantSystem {
     }
 
     @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.isCanceled()) {
-            return;
-        }
-    }
-
-    @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (mc.player == null) {
             return;
@@ -78,6 +70,9 @@ public class RevenantSystem {
         if (event.isCanceled()) {
             return;
         }
+
+        RevenantEventRender3D eventRender = new RevenantEventRender3D(event.getPartialTicks());
+        Revenant.getInstance().revEventManager.dispatch(eventRender);
 
         Revenant.getModuleManager().onRender3DModuleList(event);
 
@@ -109,7 +104,7 @@ public class RevenantSystem {
         }
 
         if (event.getType() == target) {
-            Revenant.getModuleManager().onRender2DModuleList();
+            Revenant.getInstance().revEventManager.dispatch(new RevenantEventRender2D(event.getPartialTicks()));
 
             // Prepare to render.
             TurokRenderGL.prepare2D();
@@ -142,7 +137,7 @@ public class RevenantSystem {
                     if (commandListMessage[0].equalsIgnoreCase(commands.getCommand())) {
                         commandReturnTrue = commands.onReceive(commandListMessage);
                     }
-                } catch (Exception exc) {}
+                } catch (Exception ignored) {}
             }
 
             if (!commandReturnTrue && Revenant.getCommandManager().hasPrefix(eventMessage)) {

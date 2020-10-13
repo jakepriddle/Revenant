@@ -1,10 +1,7 @@
 package me.rina.racc.manager;
 
 // Minecraft.
-import me.rina.racc.client.modules.combat.RevenantAutoCrystal;
-import me.rina.racc.client.modules.combat.RevenantAutoTotem;
-import me.rina.racc.client.modules.combat.RevenantBedAura;
-import me.rina.racc.client.modules.combat.RevenantCombatInfo;
+import me.rina.racc.client.modules.combat.*;
 import me.rina.racc.client.modules.exploit.RevenantSpeedMine;
 import me.rina.racc.client.modules.misc.RevenantFakePlayer;
 import me.rina.racc.client.modules.movement.RevenantSprint;
@@ -12,6 +9,7 @@ import me.rina.racc.client.modules.movement.RevenantStep;
 import me.rina.racc.client.modules.movement.RevenantVelocity;
 import me.rina.racc.client.modules.player.RevenantAutoReplenish;
 import me.rina.racc.client.modules.player.RevenantFastUse;
+import me.rina.racc.client.modules.render.RevenantFullbright;
 import me.rina.racc.client.modules.render.RevenantNoWeather;
 import me.rina.racc.client.modules.exploit.RevenantTimer;
 import me.rina.racc.client.modules.render.RevenantHoleESP;
@@ -70,6 +68,7 @@ public class RevenantModuleManager {
         addModuleInList(new RevenantAutoTotem());
         addModuleInList(new RevenantBedAura());
         addModuleInList(new RevenantCombatInfo());
+        addModuleInList(new RevenantOffhand());
 
         // Exploit category modules.
         addModuleInList(new RevenantSpeedMine());
@@ -87,6 +86,7 @@ public class RevenantModuleManager {
 
         // Render category modules.
         addModuleInList(new RevenantHoleESP());
+        addModuleInList(new RevenantFullbright());
 
         // Misc category modules.
         addModuleInList(new RevenantFakePlayer());
@@ -124,14 +124,6 @@ public class RevenantModuleManager {
         }
     }
 
-    public void onRender2DModuleList() {
-        for (RevenantModule modules : getModuleList()) {
-            if (modules.isEnabled()) {
-                modules.onRender2D();
-            }
-        }
-    }
-
     public void onRender3DModuleList(RenderWorldLastEvent event) {
         Revenant.getMinecraft().profiler.startSection("revenant");
 
@@ -142,14 +134,6 @@ public class RevenantModuleManager {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         GlStateManager.disableDepth();
         GlStateManager.glLineWidth(1f);
-
-        RevenantEventRender3D eventRender = new RevenantEventRender3D(event.getPartialTicks());
-
-        for (RevenantModule modules : getModuleList()) {
-            if (modules.isEnabled()) {
-                modules.onRender3D(eventRender);
-            }
-        }
 
         GlStateManager.glLineWidth(1f);
         GlStateManager.shadeModel(GL11.GL_FLAT);

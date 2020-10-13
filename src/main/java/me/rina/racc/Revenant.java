@@ -15,6 +15,7 @@ import java.awt.*;
 import java.io.*;
 
 // Minecraft.
+import me.rina.racc.event.RevenantEventManager;
 import me.rina.racc.util.client.RevenantCapeUtil;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -73,9 +74,7 @@ public class Revenant {
     private RevenantModuleManager moduleManager;
     private RevenantCommandManager commandManager;
     private RevenantSocialManager socialUserManager;
-
-    // Pomelo event manager.
-    private EventManager eventManager;
+    public RevenantEventManager revEventManager;
 
     // GUI classes to client.
     private RevenantMainGUI revenantGUI;
@@ -103,8 +102,7 @@ public class Revenant {
         this.commandManager   = new RevenantCommandManager("commands");
         this.socialUserManager    = new RevenantSocialManager();
 
-        // We initialize event manager pomelo.
-        this.eventManager = new AnnotatedEventManager();
+        this.revEventManager = new RevenantEventManager();
 
         this.revenantGUI = new RevenantMainGUI();
 
@@ -137,10 +135,6 @@ public class Revenant {
 
     public static RevenantThemeConstructor getGUITheme() {
         return INSTANCE.revenantGUITheme;
-    }
-
-    public static EventManager getPomeloEventManager() {
-        return INSTANCE.eventManager;
     }
 
     public static RevenantCommandManager getCommandManager() {
