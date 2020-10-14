@@ -4,6 +4,7 @@ package me.rina.racc.manager;
 import me.rina.racc.client.modules.combat.*;
 import me.rina.racc.client.modules.exploit.RevenantSpeedMine;
 import me.rina.racc.client.modules.misc.RevenantFakePlayer;
+import me.rina.racc.client.modules.misc.RevenantRamDupe;
 import me.rina.racc.client.modules.movement.RevenantSprint;
 import me.rina.racc.client.modules.movement.RevenantStep;
 import me.rina.racc.client.modules.movement.RevenantVelocity;
@@ -90,6 +91,7 @@ public class RevenantModuleManager {
 
         // Misc category modules.
         addModuleInList(new RevenantFakePlayer());
+        addModuleInList(new RevenantRamDupe());
 
         // Overlay components.
         addComponentInList(new RevenantComponentArrayList());

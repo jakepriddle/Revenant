@@ -16,6 +16,8 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
+//NotGhostTypes
+//TODO: Fix Speed loop add more settings maybe do a list of all effects ez
 public class RevenantCombatInfo extends RevenantModule {
     public RevenantCombatInfo() {
         super("CombatInfo", "CombatInfo", "Combat Alerts", Category.COMBAT);
