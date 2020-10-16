@@ -34,13 +34,13 @@ public class RevenantRamDupe extends RevenantModule {
         }
         int dupedRam = ThreadLocalRandom.current().nextInt(minRam.getInteger(), maxRam.getInteger() + 1);
         if (ramMode.getEnum() == ramType.MEGABYTE) {
-            RevenantChatUtil.sendClientMessage("I just duped " + dupedRam + " MBs of RAM thanks to Revenant!");
+            RevenantChatUtil.sendPlayerMessage("I just duped " + dupedRam + " MBs of RAM thanks to Revenant!");
         }
         if (ramMode.getEnum() == ramType.GIGABYTE) {
-            RevenantChatUtil.sendClientMessage("I just duped " + dupedRam + " GBs of RAM thanks to Revenant!");
+            RevenantChatUtil.sendPlayerMessage("I just duped " + dupedRam + " GBs of RAM thanks to Revenant!");
         }
         if (ramMode.getEnum() == ramType.NIGGABYTE) {
-            RevenantChatUtil.sendClientMessage("I just duped " + dupedRam + " niggabytes of RAM thanks to Revenant!");
+            RevenantChatUtil.sendPlayerMessage("I just duped " + dupedRam + " niggabytes of RAM thanks to Revenant!");
 
         }
     }
